@@ -1,0 +1,13 @@
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
