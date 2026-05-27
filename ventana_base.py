@@ -24,13 +24,19 @@ radio_jugador = 30
 velocidad = 3
 
 #==========================================================
+# ENEMIGO
 # Circulo enemigo (estatico por el momento)
 enemigo_x, enemigo_y = 300, 300
 radio_enemigo = 50
 color_enemigo = (255, 50, 50)  # Rojo
 
+# -----Movimiento del enemigo ------
+# -- Velocidad de movimiento en ambos ejes
+enemigo_vel_x = 8
+enemigo_vel_y = 8
 
 
+#==========================================================
 # Esto es para los FPS
 reloj = pygame.time.Clock()
 
@@ -78,9 +84,29 @@ while corriendo:
     if jugador_y + radio_jugador > ALTO:
         jugador_y = ALTO - radio_jugador
     # -----------------------------------------
+    #-------MOVIMIENTO DEL ENEMIGO---------
+    enemigo_x += enemigo_vel_x
+    enemigo_y += enemigo_vel_y
+    
+    # Rebote Eje X (solo si se mueve hacia la pared)
+    if enemigo_x + radio_enemigo > ANCHO and enemigo_vel_x > 0:
+        enemigo_vel_x *= -1
+        enemigo_x = ANCHO - radio_enemigo
+    elif enemigo_x - radio_enemigo < 0 and enemigo_vel_x < 0:
+        enemigo_vel_x *= -1
+        enemigo_x = radio_enemigo
+
+    # Rebote Eje Y (solo si se mueve hacia la pared)
+    if enemigo_y + radio_enemigo > ALTO and enemigo_vel_y > 0:
+        enemigo_vel_y *= -1
+        enemigo_y = ALTO - radio_enemigo
+    elif enemigo_y - radio_enemigo < 0 and enemigo_vel_y < 0:
+        enemigo_vel_y *= -1
+        enemigo_y = radio_enemigo
+    # --------------------------------
+    
     
     #---DETECCION DE COLISION----#
-    
     distancia = math.hypot(jugador_x - enemigo_x, jugador_y - enemigo_y)
     # print(f"Distancia actual: {distancia:.1f} | Suma radios: {radio_jugador + radio_enemigo}")
     
