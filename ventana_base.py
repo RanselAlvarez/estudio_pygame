@@ -10,6 +10,10 @@ pygame.display.set_caption("GAME")
 
 
 #==========================================================
+# Marca de tiempo de la ultima colision ---
+colision_time = 0
+
+
 # JUGADOR
 #Posicion de la figura en la pantalla
 jugador_x, jugador_y = ANCHO//2, ALTO//2
@@ -17,7 +21,7 @@ jugador_x, jugador_y = ANCHO//2, ALTO//2
 # Medidas de la figura
 color_jugador = (255, 200, 0) # Color inicial
 radio_jugador = 30
-velocidad = 10
+velocidad = 3
 
 #==========================================================
 # Circulo enemigo (estatico por el momento)
@@ -26,12 +30,11 @@ radio_enemigo = 50
 color_enemigo = (255, 50, 50)  # Rojo
 
 
+
 # Esto es para los FPS
 reloj = pygame.time.Clock()
 
 
-
-colision_time = 0
 corriendo = True
 
 while corriendo:
@@ -77,25 +80,35 @@ while corriendo:
     # -----------------------------------------
     
     #---DETECCION DE COLISION----#
+    
     distancia = math.hypot(jugador_x - enemigo_x, jugador_y - enemigo_y)
+    # print(f"Distancia actual: {distancia:.1f} | Suma radios: {radio_jugador + radio_enemigo}")
+    
+    
     if distancia < (radio_jugador + radio_enemigo):
         colision_time = pygame.time.get_ticks()
-        if pygame.time.get_ticks() - colision_time < 1000:
-            color_jugador = (255, 255, 255)
-            # Accion e colision(resetear la posicion del jugador)
-            jugador_x, jugador_y = ANCHO // 2, ALTO //2
+    
+    if pygame.time.get_ticks() - colision_time < 1000:
+        # Accion e colision(resetear la posicion del jugador)
+        jugador_x, jugador_y = ANCHO // 2, ALTO //2
+        color_colision = (255, 255, 255)
+    else:
+        color_colision = color_jugador       
             
             
-            
-            
+    # Dibuja el fondo de la pantalla
     pantalla.fill((255, 120, 255))
+    
     # Dibujar el circulo del jugador
-    pygame.draw.circle(pantalla, color_jugador, (jugador_x, jugador_y), radio_jugador)
+    pygame.draw.circle(pantalla, color_colision, (jugador_x, jugador_y), radio_jugador)
 
     # Dibujar el circulo del enemigo
     pygame.draw.circle(pantalla, color_enemigo, (enemigo_x, enemigo_y), radio_enemigo)
     
+    # Actualiza la pantalla para mostrar los cambios
     pygame.display.flip()
+    
+    # Fija 60 FPS
     reloj.tick(60)
     
     
